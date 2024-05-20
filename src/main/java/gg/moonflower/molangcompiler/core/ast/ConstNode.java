@@ -15,7 +15,13 @@ import org.objectweb.asm.tree.MethodNode;
  * @author Buddy, Ocelot
  */
 @ApiStatus.Internal
-public record ConstNode(float value) implements Node {
+public class ConstNode implements Node {
+
+    private final float value;
+
+    public ConstNode(float value) {
+        this.value = value;
+    }
 
     @Override
     public String toString() {

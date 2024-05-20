@@ -16,7 +16,13 @@ import org.objectweb.asm.tree.MethodNode;
  * @author Buddy
  */
 @ApiStatus.Internal
-public record ReturnNode(Node value) implements Node {
+public class ReturnNode implements Node {
+
+    private final Node value;
+
+    public ReturnNode(Node value) {
+        this.value = value;
+    }
 
     @Override
     public String toString() {

@@ -14,7 +14,13 @@ import org.objectweb.asm.tree.MethodNode;
  * @author Ocelot
  */
 @ApiStatus.Internal
-public record ScopeNode(Node node) implements Node {
+public class ScopeNode implements Node {
+
+    private final Node node;
+
+    public ScopeNode(Node node) {
+        this.node = node;
+    }
 
     @Override
     public String toString() {
@@ -41,5 +47,9 @@ public record ScopeNode(Node node) implements Node {
         MolangBytecodeEnvironment scopeEnvironment = new MolangBytecodeEnvironment(environment);
         this.node.writeBytecode(method, scopeEnvironment, breakLabel, continueLabel);
         scopeEnvironment.writeModifiedVariables(method);
+    }
+
+    public Node node() {
+        return node;
     }
 }

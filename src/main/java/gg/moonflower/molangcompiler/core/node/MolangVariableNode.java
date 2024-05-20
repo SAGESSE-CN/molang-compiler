@@ -5,11 +5,32 @@ import gg.moonflower.molangcompiler.api.MolangExpression;
 import gg.moonflower.molangcompiler.api.bridge.MolangVariable;
 import org.jetbrains.annotations.ApiStatus;
 
+import java.util.Objects;
+
 /**
  * @author Ocelot
  */
 @ApiStatus.Internal
-public record MolangVariableNode(MolangVariable value) implements MolangExpression, MolangVariable {
+public class MolangVariableNode implements MolangExpression, MolangVariable {
+
+    private final MolangVariable value;
+
+    public MolangVariableNode(MolangVariable value) {
+        this.value = value;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof MolangVariableNode)) return false;
+        MolangVariableNode that = (MolangVariableNode) o;
+        return Objects.equals(value, that.value);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(value);
+    }
 
     @Override
     public float get(MolangEnvironment environment) {

@@ -15,7 +15,7 @@ import org.objectweb.asm.tree.MethodNode;
  * @author Buddy
  */
 @ApiStatus.Internal
-public record BreakNode() implements Node {
+public class BreakNode implements Node {
 
     @Override
     public String toString() {

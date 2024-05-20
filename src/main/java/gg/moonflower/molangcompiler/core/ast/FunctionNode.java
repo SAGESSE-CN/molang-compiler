@@ -21,7 +21,17 @@ import java.util.stream.Collectors;
  * @author Ocelot
  */
 @ApiStatus.Internal
-public record FunctionNode(String object, String function, Node... arguments) implements Node {
+public class FunctionNode implements Node {
+
+    private final String object;
+    private final String function;
+    private final Node[] arguments;
+
+    public FunctionNode(String object, String function, Node... arguments) {
+        this.object = object;
+        this.function = function;
+        this.arguments = arguments;
+    }
 
     @Override
     public String toString() {

@@ -187,6 +187,9 @@ public interface MolangEnvironment {
      * @since 3.0.0
      */
     static MolangEnvironment immutable(MolangEnvironment environment) {
-        return environment instanceof ImmutableMolangEnvironment immutableEnvironment ? immutableEnvironment : new ImmutableMolangEnvironment(environment);
+        if (environment instanceof ImmutableMolangEnvironment) {
+            return (ImmutableMolangEnvironment) environment;
+        }
+        return new ImmutableMolangEnvironment(environment);
     }
 }

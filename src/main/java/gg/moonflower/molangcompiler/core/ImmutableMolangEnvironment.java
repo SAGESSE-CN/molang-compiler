@@ -12,7 +12,13 @@ import java.util.Collection;
  * @author Ocelot
  */
 @ApiStatus.Internal
-public record ImmutableMolangEnvironment(MolangEnvironment environment) implements MolangEnvironment {
+public class ImmutableMolangEnvironment implements MolangEnvironment {
+
+    private final MolangEnvironment environment;
+
+    public ImmutableMolangEnvironment(MolangEnvironment environment) {
+        this.environment = environment;
+    }
 
     @Override
     public void loadLibrary(String name, MolangObject object, String... aliases) {

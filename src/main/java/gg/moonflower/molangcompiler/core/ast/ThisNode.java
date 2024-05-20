@@ -1,5 +1,6 @@
 package gg.moonflower.molangcompiler.core.ast;
 
+import gg.moonflower.molangcompiler.api.MolangEnvironment;
 import gg.moonflower.molangcompiler.api.exception.MolangException;
 import gg.moonflower.molangcompiler.core.compiler.BytecodeCompiler;
 import gg.moonflower.molangcompiler.core.compiler.MolangBytecodeEnvironment;
@@ -13,7 +14,7 @@ import org.objectweb.asm.tree.MethodNode;
  * Retrieves the value of a "this" and puts it onto the stack.
  */
 @ApiStatus.Internal
-public record ThisNode() implements Node {
+public class ThisNode implements Node {
 
     @Override
     public String toString() {

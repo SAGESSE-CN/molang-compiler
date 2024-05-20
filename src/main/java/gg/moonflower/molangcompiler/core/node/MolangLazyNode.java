@@ -16,7 +16,7 @@ public class MolangLazyNode implements MolangExpression {
     private final Supplier<Float> value;
 
     public MolangLazyNode(Supplier<Float> value) {
-        this.value = new Supplier<>() {
+        this.value = new Supplier<Float>() {
             private Float result = null;
 
             @Override

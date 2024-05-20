@@ -19,7 +19,17 @@ import org.objectweb.asm.tree.MethodNode;
  * @author Buddy
  */
 @ApiStatus.Internal
-public record BinaryOperationNode(BinaryOperation operator, Node left, Node right) implements Node {
+public class BinaryOperationNode implements Node {
+
+    private final BinaryOperation operator;
+    private final Node left;
+    private final Node right;
+
+    public BinaryOperationNode(BinaryOperation operator, Node left, Node right) {
+        this.operator = operator;
+        this.left = left;
+        this.right = right;
+    }
 
     @Override
     public String toString() {
@@ -40,22 +50,36 @@ public record BinaryOperationNode(BinaryOperation operator, Node left, Node righ
     public float evaluate(MolangBytecodeEnvironment environment) throws MolangException {
         float left = this.left.evaluate(environment);
         float right = this.right.evaluate(environment);
-        return switch (this.operator) {
-            case ADD -> left + right;
-            case SUBTRACT -> left - right;
-            case MULTIPLY -> left * right;
-            case DIVIDE -> left / right;
-            case AND -> left != 0 && right != 0 ? 1.0F : 0.0F;
-            case OR -> left != 0 || right != 0 ? 1.0F : 0.0F;
-            case LESS -> left < right ? 1.0F : 0.0F;
-            case LESS_EQUALS -> left <= right ? 1.0F : 0.0F;
-            case GREATER -> left > right ? 1.0F : 0.0F;
-            case GREATER_EQUALS -> left >= right ? 1.0F : 0.0F;
-            case EQUALS -> left == right ? 1.0F : 0.0F;
-            case NOT_EQUALS -> left != right ? 1.0F : 0.0F;
-            // If the left is constant, then the value always exists and returns the first value
-            case NULL_COALESCING -> left;
-        };
+        switch (this.operator) {
+            case ADD:
+                return left + right;
+            case SUBTRACT:
+                return left - right;
+            case MULTIPLY:
+                return left * right;
+            case DIVIDE:
+                return left / right;
+            case AND:
+                return left != 0 && right != 0 ? 1.0F : 0.0F;
+            case OR:
+                return left != 0 || right != 0 ? 1.0F : 0.0F;
+            case LESS:
+                return left < right ? 1.0F : 0.0F;
+            case LESS_EQUALS:
+                return left <= right ? 1.0F : 0.0F;
+            case GREATER:
+                return left > right ? 1.0F : 0.0F;
+            case GREATER_EQUALS:
+                return left >= right ? 1.0F : 0.0F;
+            case EQUALS:
+                return left == right ? 1.0F : 0.0F;
+            case NOT_EQUALS:
+                return left != right ? 1.0F : 0.0F;
+            case NULL_COALESCING:
+                // If the left is constant, then the value always exists and returns the first value
+                return left;
+        }
+        return 0;
     }
 
     @Override
@@ -68,7 +92,7 @@ public record BinaryOperationNode(BinaryOperation operator, Node left, Node righ
         }
 
         switch (this.operator) {
-            case AND -> {
+            case AND: {
                 Label label_false = new Label();
                 Label label_end = new Label();
                 writeNode(this.left, method, environment, breakLabel, continueLabel);
@@ -93,8 +117,10 @@ public record BinaryOperationNode(BinaryOperation operator, Node left, Node righ
 
                 //end:
                 method.visitLabel(label_end);
+
+                break;
             }
-            case OR -> {
+            case OR: {
                 Label label_true = new Label();
                 Label label_end = new Label();
                 //left != 0: goto true
@@ -119,11 +145,14 @@ public record BinaryOperationNode(BinaryOperation operator, Node left, Node righ
 
                 //end:
                 method.visitLabel(label_end);
+
+                break;
             }
-            case NULL_COALESCING -> {
-                if (!(this.left instanceof VariableGetNode lookup)) {
+            case NULL_COALESCING: {
+                if (!(this.left instanceof VariableGetNode)) {
                     throw new MolangSyntaxException("Expected variable lookup, got " + this.left);
                 }
+                VariableGetNode lookup = (VariableGetNode)this.left;
 
                 // Test if variable exists
                 environment.loadObjectHas(method, lookup.object(), lookup.name());
@@ -137,8 +166,10 @@ public record BinaryOperationNode(BinaryOperation operator, Node left, Node righ
                 method.visitLabel(label_false);
                 writeNode(this.right, method, environment, breakLabel, continueLabel);
                 method.visitLabel(label_end);
+
+                break;
             }
-            case MULTIPLY -> {
+            case MULTIPLY: {
                 if (environment.optimize() && this.tryWriteNegate(method, environment, breakLabel, continueLabel)) {
                     return;
                 }
@@ -146,8 +177,10 @@ public record BinaryOperationNode(BinaryOperation operator, Node left, Node righ
                 writeNode(this.left, method, environment, breakLabel, continueLabel);
                 writeNode(this.right, method, environment, breakLabel, continueLabel);
                 method.visitInsn(Opcodes.FMUL);
+
+                break;
             }
-            case DIVIDE -> {
+            case DIVIDE: {
                 if (environment.optimize() && this.tryWriteNegate(method, environment, breakLabel, continueLabel)) {
                     return;
                 }
@@ -155,20 +188,38 @@ public record BinaryOperationNode(BinaryOperation operator, Node left, Node righ
                 writeNode(this.left, method, environment, breakLabel, continueLabel);
                 writeNode(this.right, method, environment, breakLabel, continueLabel);
                 method.visitInsn(Opcodes.FDIV);
+
+                break;
             }
-            default -> {
+            default: {
                 writeNode(this.left, method, environment, breakLabel, continueLabel);
                 writeNode(this.right, method, environment, breakLabel, continueLabel);
 
                 switch (this.operator) {
-                    case ADD -> method.visitInsn(Opcodes.FADD);
-                    case SUBTRACT -> method.visitInsn(Opcodes.FSUB);
-                    case EQUALS -> writeComparision(method, Opcodes.IFNE);
-                    case NOT_EQUALS -> writeComparision(method, Opcodes.IFEQ);
-                    case LESS_EQUALS -> writeComparision(method, Opcodes.IFGT);
-                    case LESS -> writeComparision(method, Opcodes.IFGE);
-                    case GREATER_EQUALS -> writeComparision(method, Opcodes.IFLT);
-                    case GREATER -> writeComparision(method, Opcodes.IFLE);
+                    case ADD:
+                        method.visitInsn(Opcodes.FADD);
+                        break;
+                    case SUBTRACT:
+                        method.visitInsn(Opcodes.FSUB);
+                        break;
+                    case EQUALS:
+                        writeComparision(method, Opcodes.IFNE);
+                        break;
+                    case NOT_EQUALS:
+                        writeComparision(method, Opcodes.IFEQ);
+                        break;
+                    case LESS_EQUALS:
+                        writeComparision(method, Opcodes.IFGT);
+                        break;
+                    case LESS:
+                        writeComparision(method, Opcodes.IFGE);
+                        break;
+                    case GREATER_EQUALS:
+                        writeComparision(method, Opcodes.IFLT);
+                        break;
+                    case GREATER:
+                        writeComparision(method, Opcodes.IFLE);
+                        break;
                 }
             }
         }

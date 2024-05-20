@@ -26,7 +26,13 @@ public interface MolangJavaFunction {
      * @author Ocelot
      * @since 1.0.0
      */
-    record Context(float[] parameters) {
+    class Context {
+
+        private final float[] parameters;
+
+        public Context(float[] parameters) {
+            this.parameters = parameters;
+        }
 
         /**
          * Resolves the specified parameter.

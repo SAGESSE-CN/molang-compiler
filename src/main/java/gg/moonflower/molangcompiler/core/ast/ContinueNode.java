@@ -15,7 +15,7 @@ import org.objectweb.asm.tree.MethodNode;
  * @author Buddy
  */
 @ApiStatus.Internal
-public record ContinueNode() implements Node {
+public class ContinueNode implements Node {
 
     @Override
     public String toString() {

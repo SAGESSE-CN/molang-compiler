@@ -17,7 +17,15 @@ import org.objectweb.asm.tree.MethodNode;
  * @author Buddy
  */
 @ApiStatus.Internal
-public record LoopNode(Node iterations, Node body) implements Node {
+public class LoopNode implements Node {
+
+    private final Node iterations;
+    private final Node body;
+
+    public LoopNode(Node iterations, Node body) {
+        this.iterations = iterations;
+        this.body = body;
+    }
 
     @Override
     public String toString() {

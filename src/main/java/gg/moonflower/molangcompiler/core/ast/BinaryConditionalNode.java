@@ -16,7 +16,15 @@ import org.objectweb.asm.tree.MethodNode;
  * @author Buddy
  */
 @ApiStatus.Internal
-public record BinaryConditionalNode(Node value, Node branch) implements Node {
+public class BinaryConditionalNode implements Node {
+
+    private final Node value;
+    private final Node branch;
+
+    public BinaryConditionalNode(Node value, Node branch) {
+        this.value = value;
+        this.branch = branch;
+    }
 
     @Override
     public String toString() {

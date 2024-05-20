@@ -14,9 +14,17 @@ import java.util.Set;
  * @author Ocelot
  */
 @ApiStatus.Internal
-public record MolangBytecodeEnvironment(Map<String, Integer> variables,
-                                        Set<String> modifiedVariables,
-                                        boolean optimize) {
+public class MolangBytecodeEnvironment {
+
+    private final Map<String, Integer> variables;
+    private final Set<String> modifiedVariables;
+    private final boolean optimize;
+
+    public MolangBytecodeEnvironment(Map<String, Integer> variables, Set<String> modifiedVariables, boolean optimize) {
+        this.variables = variables;
+        this.modifiedVariables = modifiedVariables;
+        this.optimize = optimize;
+    }
 
     public MolangBytecodeEnvironment(MolangBytecodeEnvironment environment) {
         this(new HashMap<>(environment.variables), new LinkedHashSet<>(), environment.optimize);
@@ -204,5 +212,13 @@ public record MolangBytecodeEnvironment(Map<String, Integer> variables,
             );
         }
         this.modifiedVariables.clear();
+    }
+
+    public boolean optimize() {
+        return optimize;
+    }
+
+    public Map<String, Integer> variables() {
+        return variables;
     }
 }

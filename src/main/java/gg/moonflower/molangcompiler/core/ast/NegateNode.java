@@ -15,7 +15,13 @@ import org.objectweb.asm.tree.MethodNode;
  * @param value The value to negate
  */
 @ApiStatus.Internal
-public record NegateNode(Node value) implements Node {
+public class NegateNode implements Node {
+
+    private final Node value;
+
+    public NegateNode(Node value) {
+        this.value = value;
+    }
 
     @Override
     public String toString() {

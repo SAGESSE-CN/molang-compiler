@@ -83,8 +83,8 @@ public class MolangUtil {
         }
 
         MolangExpression old = object.get(name);
-        if (old instanceof MolangVariable variable) {
-            variable.setValue(value);
+        if (old instanceof MolangVariable) {
+            ((MolangVariable) old).setValue(value);
         } else {
             object.set(name, new MolangConstantNode(value));
         }

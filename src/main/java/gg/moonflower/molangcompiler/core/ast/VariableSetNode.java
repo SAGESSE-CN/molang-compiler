@@ -18,10 +18,19 @@ import org.objectweb.asm.tree.MethodNode;
  * @author Ocelot
  */
 @ApiStatus.Internal
-public record VariableSetNode(String object,
-                              String name,
-                              Node value,
-                              boolean returnValue) implements OptionalValueNode {
+public class VariableSetNode implements OptionalValueNode {
+
+    private final String object;
+    private final String name;
+    private final Node value;
+    private final boolean returnValue;
+
+    public VariableSetNode(String object, String name, Node value, boolean returnValue) {
+        this.object = object;
+        this.name = name;
+        this.value = value;
+        this.returnValue = returnValue;
+    }
 
     public VariableSetNode(String object, String name, Node value) {
         this(object, name, value, false);

@@ -38,7 +38,7 @@ public final class MolangLexer {
             throw new MolangSyntaxException("Unknown Token", reader.getString(), reader.getCursor());
         }
 
-        return tokens.toArray(Token[]::new);
+        return tokens.toArray(new Token[0]);
     }
 
     private static Token getToken(StringReader reader) {
@@ -54,10 +54,27 @@ public final class MolangLexer {
         return null;
     }
 
-    public record Token(TokenType type, String value) {
+    public static class Token {
+
+        private final TokenType type;
+        private final String value;
+
+        public Token(TokenType type, String value) {
+            this.type = type;
+            this.value = value;
+        }
+
         @Override
         public String toString() {
             return this.type + "[" + this.value + "]";
+        }
+
+        public TokenType type() {
+            return type;
+        }
+
+        public String value() {
+            return value;
         }
     }
 

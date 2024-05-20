@@ -5,11 +5,33 @@ import gg.moonflower.molangcompiler.api.MolangExpression;
 import gg.moonflower.molangcompiler.api.exception.MolangRuntimeException;
 import org.jetbrains.annotations.ApiStatus;
 
+import java.util.Arrays;
+import java.util.Objects;
+
 /**
  * @author Ocelot
  */
 @ApiStatus.Internal
-public record MolangCompoundNode(MolangExpression... expressions) implements MolangExpression {
+public class MolangCompoundNode implements MolangExpression {
+
+    private final MolangExpression[] expressions;
+
+    public MolangCompoundNode(MolangExpression... expressions) {
+        this.expressions = expressions;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof MolangCompoundNode)) return false;
+        MolangCompoundNode that = (MolangCompoundNode) o;
+        return Objects.deepEquals(expressions, that.expressions);
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(expressions);
+    }
 
     @Override
     public float get(MolangEnvironment environment) throws MolangRuntimeException {

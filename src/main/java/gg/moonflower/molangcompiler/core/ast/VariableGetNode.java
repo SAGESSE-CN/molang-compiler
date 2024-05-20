@@ -16,7 +16,15 @@ import org.objectweb.asm.tree.MethodNode;
  * @author Ocelot
  */
 @ApiStatus.Internal
-public record VariableGetNode(String object, String name) implements Node {
+public class VariableGetNode implements Node {
+
+    private final String object;
+    private final String name;
+
+    public VariableGetNode(String object, String name) {
+        this.object = object;
+        this.name = name;
+    }
 
     @Override
     public String toString() {
@@ -37,5 +45,13 @@ public record VariableGetNode(String object, String name) implements Node {
     public void writeBytecode(MethodNode method, MolangBytecodeEnvironment environment, @Nullable Label breakLabel, @Nullable Label continueLabel) throws MolangException {
         int index = environment.loadVariable(method, this.object, this.name);
         method.visitVarInsn(Opcodes.FLOAD, index);
+    }
+
+    public String object() {
+        return object;
+    }
+
+    public String name() {
+        return name;
     }
 }

@@ -17,7 +17,17 @@ import org.objectweb.asm.tree.MethodNode;
  * @author Buddy
  */
 @ApiStatus.Internal
-public record TernaryOperationNode(Node value, Node left, Node right) implements Node {
+public class TernaryOperationNode implements Node {
+
+    private final Node value;
+    private final Node left;
+    private final Node right;
+
+    public TernaryOperationNode(Node value, Node left, Node right) {
+        this.value = value;
+        this.left = left;
+        this.right = right;
+    }
 
     @Override
     public String toString() {

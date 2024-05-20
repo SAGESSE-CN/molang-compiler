@@ -14,7 +14,7 @@ import org.objectweb.asm.tree.MethodNode;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
+import java.util.Arrays;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
@@ -73,7 +73,7 @@ public class BytecodeCompiler extends ClassLoader {
             method.access = Opcodes.ACC_PUBLIC;
             method.name = "get";
             method.desc = "(Lgg/moonflower/molangcompiler/api/MolangEnvironment;)F";
-            method.exceptions = List.of("gg/moonflower/molangcompiler/api/exception/MolangRuntimeException");
+            method.exceptions = Arrays.asList("gg/moonflower/molangcompiler/api/exception/MolangRuntimeException");
             node.writeBytecode(method, environment, null, null);
             classNode.methods.add(method);
 
@@ -155,13 +155,25 @@ public class BytecodeCompiler extends ClassLoader {
 
     public static void writeIntConst(MethodNode method, int value) {
         switch (value) {
-            case 0 -> method.visitInsn(Opcodes.ICONST_0);
-            case 1 -> method.visitInsn(Opcodes.ICONST_1);
-            case 2 -> method.visitInsn(Opcodes.ICONST_2);
-            case 3 -> method.visitInsn(Opcodes.ICONST_3);
-            case 4 -> method.visitInsn(Opcodes.ICONST_4);
-            case 5 -> method.visitInsn(Opcodes.ICONST_5);
-            default -> {
+            case 0:
+                method.visitInsn(Opcodes.ICONST_0);
+                break;
+            case 1:
+                method.visitInsn(Opcodes.ICONST_1);
+                break;
+            case 2:
+                method.visitInsn(Opcodes.ICONST_2);
+                break;
+            case 3:
+                method.visitInsn(Opcodes.ICONST_3);
+                break;
+            case 4:
+                method.visitInsn(Opcodes.ICONST_4);
+                break;
+            case 5:
+                method.visitInsn(Opcodes.ICONST_5);
+                break;
+            default: {
                 if (value < Byte.MAX_VALUE) {
                     method.visitIntInsn(Opcodes.BIPUSH, (byte) value);
                 } else if (value < Short.MAX_VALUE) {

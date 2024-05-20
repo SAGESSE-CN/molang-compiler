@@ -11,7 +11,13 @@ import java.util.Collection;
  * @author Ocelot
  * @since 1.0.0
  */
-public record ImmutableMolangObject(MolangObject parent) implements MolangObject {
+public class ImmutableMolangObject implements MolangObject {
+
+    private final MolangObject parent;
+
+    public ImmutableMolangObject(MolangObject parent) {
+        this.parent = parent;
+    }
 
     @Override
     public void set(String name, MolangExpression value) throws MolangRuntimeException {
@@ -41,5 +47,9 @@ public record ImmutableMolangObject(MolangObject parent) implements MolangObject
     @Override
     public String toString() {
         return this.parent.toString();
+    }
+
+    public MolangObject parent() {
+        return parent;
     }
 }

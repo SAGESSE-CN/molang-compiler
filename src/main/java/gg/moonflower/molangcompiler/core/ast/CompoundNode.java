@@ -14,7 +14,13 @@ import org.objectweb.asm.tree.MethodNode;
  * @author Ocelot
  */
 @ApiStatus.Internal
-public record CompoundNode(Node... nodes) implements Node {
+public class CompoundNode implements Node {
+
+    private final Node[] nodes;
+
+    public CompoundNode(Node... nodes) {
+        this.nodes = nodes;
+    }
 
     @Override
     public String toString() {
